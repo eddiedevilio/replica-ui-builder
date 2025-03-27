@@ -1,5 +1,6 @@
 
 import { useEffect } from 'react';
+import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 
 const Index = () => {
@@ -13,6 +14,7 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-white overflow-hidden">
+      <Navbar />
       <div className="pt-16 p-6">
         <Hero />
       </div>
