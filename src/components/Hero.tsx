@@ -1,6 +1,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Hero = () => {
   const imageRef = useRef<HTMLImageElement>(null);
@@ -30,7 +31,9 @@ const Hero = () => {
   
   return (
     <div className="min-h-screen w-full nectar-gradient rounded-3xl overflow-hidden relative flex items-center justify-center">
-      <div className="absolute w-full h-full bg-nectar-light/20 mix-blend-overlay"></div>
+      <div className="absolute w-full h-full bg-nectar-light/20 mix-blend-overlay">
+        <Navbar />
+      </div>
       
       <div className="container mx-auto px-6 py-12 z-10 flex flex-col lg:flex-row items-center justify-between">
         <div className="w-full lg:w-1/2 mb-12 lg:mb-0 relative opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
