@@ -62,10 +62,10 @@ const Hero = () => {
             
             <div className="flex gap-4">
               <Link 
-                to="/shop"
+                to="/order"
                 className="button-hover px-8 py-3 bg-nectar text-white font-medium rounded-full transition-all"
               >
-                Buy Now
+                Order Now
               </Link>
               <Link 
                 to="/about"
