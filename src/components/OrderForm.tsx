@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -33,7 +33,10 @@ const OrderForm = () => {
     },
   });
 
-  const { fields, append, remove } = form.control._fields.links || { fields: [{ id: "0" }], append: () => {}, remove: () => {} };
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "links",
+  });
   
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
@@ -117,8 +120,8 @@ const OrderForm = () => {
             
             <div className="space-y-4">
               <FormLabel className="text-brown font-medium">Links</FormLabel>
-              {form.watch("links").map((_, index) => (
-                <div key={index} className="flex gap-2">
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex gap-2">
                   <Input
                     placeholder="https://example.com"
                     className="border-brown/30 focus-visible:ring-nectar flex-1"
@@ -130,7 +133,7 @@ const OrderForm = () => {
                     size="icon"
                     className="border-brown/30 text-brown hover:bg-nectar hover:text-white hover:border-nectar"
                     onClick={() => remove(index)}
-                    disabled={form.watch("links").length <= 1}
+                    disabled={fields.length <= 1}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
