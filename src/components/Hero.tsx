@@ -1,37 +1,76 @@
-import { useEffect, useRef } from 'react';
+
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const images = [
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/640px-PNG_transparency_demonstration_1.png",
+  "https://images.unsplash.com/photo-1546548970-71785318a17b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+  "https://images.unsplash.com/photo-1622597467836-f3e6007c6d24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+  "https://images.unsplash.com/photo-1589365278144-c9e705f843ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
+];
+
 const Hero = () => {
   const imageRef = useRef<HTMLImageElement>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Animation for initial image appearance
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         if (imageRef.current) {
-          imageRef.current.classList.add('animate-fade-in');
+          imageRef.current.classList.remove('opacity-0');
+          imageRef.current.classList.add('opacity-100', 'transition-opacity', 'duration-700');
         }
       }
     }, {
       threshold: 0.1
     });
+    
     if (imageRef.current) {
       observer.observe(imageRef.current);
     }
+    
     return () => {
       if (imageRef.current) {
         observer.unobserve(imageRef.current);
       }
     };
   }, []);
+
+  // Carousel effect to change photos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return <div className="min-h-screen w-full nectar-gradient rounded-3xl overflow-hidden relative flex items-center justify-center">
       <div className="absolute w-full h-full bg-nectar-light/20 mix-blend-overlay"></div>
       
       <div className="container mx-auto px-6 py-12 z-10 flex flex-col lg:flex-row items-center justify-between">
-        <div className="w-full lg:w-1/2 mb-12 lg:mb-0 relative opacity-0 animate-fade-in" style={{
+        <div className="w-full lg:w-1/2 mb-12 lg:mb-0 relative animate-fade-in" style={{
         animationDelay: '300ms',
         animationFillMode: 'forwards'
       }}>
-          <img ref={imageRef} alt="Fruit Fusion Juice" className="w-full h-auto opacity-0" style={{
-          maxWidth: '600px'
-        }} src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/640px-PNG_transparency_demonstration_1.png" />
+          <div className="relative overflow-hidden" style={{ maxWidth: '600px' }}>
+            {images.map((src, index) => (
+              <img 
+                key={index}
+                ref={index === 0 ? imageRef : null}
+                src={src}
+                alt={`Fruit Fusion Juice ${index + 1}`}
+                className={`w-full h-auto transition-all duration-1000 ease-in-out absolute top-0 left-0 ${
+                  currentImageIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+                style={{
+                  maxWidth: '600px',
+                  transform: currentImageIndex === index ? 'scale(1)' : 'scale(1.05)',
+                }}
+              />
+            ))}
+          </div>
           
           <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-leaf/10 rounded-full animate-float"></div>
           <div className="absolute top-1/4 -right-10 w-16 h-16 bg-nectar-light/20 rounded-full animate-float" style={{
@@ -66,4 +105,5 @@ const Hero = () => {
       </div>
     </div>;
 };
+
 export default Hero;
