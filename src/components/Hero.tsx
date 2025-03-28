@@ -2,14 +2,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const images = [
+// Default images if none are provided via props
+const defaultImages = [
   "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/640px-PNG_transparency_demonstration_1.png",
   "https://images.unsplash.com/photo-1546548970-71785318a17b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
   "https://images.unsplash.com/photo-1622597467836-f3e6007c6d24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
   "https://images.unsplash.com/photo-1589365278144-c9e705f843ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
 ];
 
-const Hero = () => {
+interface HeroProps {
+  images?: string[];
+}
+
+const Hero = ({ images = defaultImages }: HeroProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -44,7 +49,7 @@ const Hero = () => {
     }, 5000); // Change image every 5 seconds
     
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   return <div className="min-h-screen w-full nectar-gradient rounded-3xl overflow-hidden relative flex items-center justify-center">
       <div className="absolute w-full h-full bg-nectar-light/20 mix-blend-overlay"></div>
