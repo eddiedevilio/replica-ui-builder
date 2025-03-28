@@ -10,10 +10,13 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+// Explicitly define the link type for the array
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   contact: z.string().min(10, { message: "Please enter a valid contact number" }),
-  links: z.array(z.string().url({ message: "Please enter a valid URL" }).or(z.string().length(0))),
+  links: z.array(
+    z.string().url({ message: "Please enter a valid URL" }).or(z.string().length(0))
+  ),
   message: z.string().optional(),
 });
 
