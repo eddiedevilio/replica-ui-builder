@@ -15,29 +15,28 @@ interface HeroProps {
 }
 
 const Hero = ({ images = defaultImages }: HeroProps) => {
-  const imageRef = useRef<HTMLImageElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Animation for initial image appearance
+  // Animation for initial container appearance
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        if (imageRef.current) {
-          imageRef.current.classList.remove('opacity-0');
-          imageRef.current.classList.add('opacity-100', 'transition-opacity', 'duration-700');
+        if (imageContainerRef.current) {
+          imageContainerRef.current.classList.add('opacity-100', 'transition-opacity', 'duration-700');
         }
       }
     }, {
       threshold: 0.1
     });
     
-    if (imageRef.current) {
-      observer.observe(imageRef.current);
+    if (imageContainerRef.current) {
+      observer.observe(imageContainerRef.current);
     }
     
     return () => {
-      if (imageRef.current) {
-        observer.unobserve(imageRef.current);
+      if (imageContainerRef.current) {
+        observer.unobserve(imageContainerRef.current);
       }
     };
   }, []);
@@ -59,11 +58,14 @@ const Hero = ({ images = defaultImages }: HeroProps) => {
         animationDelay: '300ms',
         animationFillMode: 'forwards'
       }}>
-          <div className="relative overflow-hidden" style={{ maxWidth: '600px' }}>
+          <div 
+            ref={imageContainerRef}
+            className="relative overflow-hidden opacity-100" 
+            style={{ maxWidth: '600px', height: '400px' }}
+          >
             {images.map((src, index) => (
               <img 
                 key={index}
-                ref={index === 0 ? imageRef : null}
                 src={src}
                 alt={`Fruit Fusion Juice ${index + 1}`}
                 className={`w-full h-auto transition-all duration-1000 ease-in-out absolute top-0 left-0 ${
